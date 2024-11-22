@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 
-const ReusableInput = ({ type, name, placeholder, value, onChange }) => {
+const ReusableInput = ({ label, type, name, placeholder, value, onChange }) => {
     return (
         <div className="input-container">
-            <label htmlFor={name}>{placeholder}</label>
+            <label htmlFor={name}>{label}</label>
             <input
                 type={type}
                 name={name}
@@ -16,10 +16,12 @@ const ReusableInput = ({ type, name, placeholder, value, onChange }) => {
         </div>
     );
 };
+
 ReusableInput.propTypes = {
+    label: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    placeholder: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
 };
