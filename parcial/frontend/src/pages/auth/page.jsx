@@ -44,7 +44,6 @@ export default function Auth() {
         switch (formType) {
             case 'login':
                 login(formData)
-                navigate('/')
                 break
             case 'signup':
                 if (formData.password !== formData.confirmPassword) {
@@ -53,7 +52,6 @@ export default function Auth() {
                     return
                 }
                 signup(formData)
-                navigate('/')
                 break
         }
     }
