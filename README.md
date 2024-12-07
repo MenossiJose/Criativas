@@ -42,6 +42,9 @@ Abaixo estão os pré-requisitos para compilar e executar o sistema
 - **Git** (versão 2.47.1 ou superior) - *opcional*: [https://git-scm.com/downloads](https://git-scm.com/downloads);
 - Um navegador atualizado para acessar a interface do projeto.
 
+## Vídeo de Instalação das Ferramentas e Execução do Sistema
+[Link Google Drive](https://drive.google.com/file/d/1YIk4fIpO3qpetR5HnG4P3J8oMlsrZrQe/view)
+
 ## Bibliotecas:
 
 Abaixo estão listadas as bibliotecas e ferramentas utilizadas no projeto, organizadas por **frontend** e **backend**, com suas respectivas versões e links para mais informações.
@@ -66,16 +69,16 @@ Abaixo estão listadas as bibliotecas e ferramentas utilizadas no projeto, organ
 - **Passport** (v0.7.0): [https://www.passportjs.org/](https://www.passportjs.org/)
 - **Passport Local** (v1.0.0): [https://github.com/jaredhanson/passport-local](https://github.com/jaredhanson/passport-local)
 
- ## Baixando o Projeto
+## Baixando o Projeto
 
- ### Manual
+### Manual
 
  1. Dentro do repositório, clique em **Code**.  
  2. Selecione a opção **Download ZIP** para baixar os arquivos.  
  3. Mova o arquivo compactado para a pasta desejada no seu computador.  
  4. Descompacte o arquivo e acesse a pasta criada. 
 
- ### Git
+### Git
  
  1. Crie uma pasta para armazenar o projeto.
  2. Abra o Git Bash dentro da pasta.
@@ -85,7 +88,7 @@ Abaixo estão listadas as bibliotecas e ferramentas utilizadas no projeto, organ
  ```
  4. Acesse a pasta Criativas.
 
- ## Inicialização e Configuração do Banco de Dados
+## Inicialização e Configuração do Banco de Dados
 
  1. Acesse [MongoDB](https://www.mongodb.com/pt-br) e faça login.
  2. Crie um novo **Cluster** clicando na opção **Create Cluster**.  
