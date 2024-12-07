@@ -66,6 +66,7 @@ const Register = () => {
           onSubmit={handleSubmit(submit)}
           style={{ padding: "1.25rem", marginBottom: "1.25rem" }}
         >
+          {/* Campo de primeiro nome */}
           <FormControl
             isInvalid={errors.first_name}
             w="100%"
@@ -99,7 +100,7 @@ const Register = () => {
               {errors.first_name && errors.first_name.message}
             </FormErrorMessage>
           </FormControl>
-
+          {/* Campo de Sobrenome */}
           <FormControl
             isInvalid={errors.last_name}
             w="100%"
@@ -133,7 +134,7 @@ const Register = () => {
               {errors.last_name && errors.last_name.message}
             </FormErrorMessage>
           </FormControl>
-
+          {/* Campo de data de nascimento */}
           <FormControl
             isInvalid={errors.date_of_birth}
             w="100%"
@@ -168,7 +169,7 @@ const Register = () => {
               {errors.date_of_birth && errors.date_of_birth.message}
             </FormErrorMessage>
           </FormControl>
-
+          {/* Campo de Email */}
           <FormControl
             isInvalid={errors.email}
             w="100%"
