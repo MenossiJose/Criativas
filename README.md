@@ -1,5 +1,30 @@
 # Criativas
-Repositório destinado ao desenvolvimento ao banco de ideais 'Criativas', da matéria EC47G-C81
+Repositório destinado ao desenvolvimento ao banco de ideais 'Criativas', da matéria EC47G-C81 - Grupo 06
+
+# Apresentação das Funcionalidades Desenvolvidas
+Listagem das Funcionalidades Desenvolvidas
+
+## Cadastro de Usuários
+- Permite o registro de novos usuários através da tela de cadastro, onde são informados nome completo, e-mail e senha.
+- A senha é armazenada de forma segura no banco de dados com criptografia, garantindo a proteção das informações.
+
+## Login
+
+- Sistema de autenticação que permite aos usuários acessar o sistema.
+- Uma sessão é gerada e armazenada no localStorage do navegador para manter o estado do usuário logado.
+
+## Criação de Ideias
+
+- Na tela de cadastro de ideias, é possível enviar um formulário contendo:
+- Categoria e texto da ideia (informados pelo usuário).
+- Data de criação, usuário responsável e número inicial de curtidas (0), gerados automaticamente.
+
+## Perfil
+- Tela dedicada para exibir informações sobre o usuário logado, como nome e e-mail.
+
+## Home
+
+Apresenta uma listagem de todas as ideias cadastradas, exibindo atributos como categoria, texto, autor, data de criação e número de curtidas.
 
 # Instrução de Instalação
 
@@ -125,3 +150,39 @@ Exemplo de saída:
 ➜  press h + enter to show help
 
 Copie esse endereço e cole no campo de URL do seu navegador para acessar a interface do projeto.
+
+# Roteiro de Teste do Sistema
+
+## Cadastro de Usuário
+
+- Passo 1: Acesse a tela de cadastro.
+- Passo 2: Preencha os campos obrigatórios (nome completo, e-mail válido e senha).
+- Passo 3: Submeta o formulário para criar a conta.
+
+## Login no Sistema
+
+- Passo 1: Acesse a tela de login.
+- Passo 2: Informe o e-mail e senha previamente cadastrados.
+- Passo 3: Submeta os dados e autentique-se no sistema.
+
+- Observação: O usuário precisa estar logado para acessar as telas de perfil e cadastro de ideias.
+
+## Acesso à Tela de Perfil
+
+- Pré-requisito: Estar logado no sistema.
+
+- Passo 1: Após o login, acesse a tela de perfil.
+- Passo 2: Verifique as informações exibidas, como nome completo e e-mail.
+
+## Cadastro de Ideias
+
+- Pré-requisito: Estar logado no sistema.
+
+- Passo 1: Acesse a tela de cadastro de ideias.
+- Passo 2: Preencha os campos obrigatórios (categoria e texto da ideia).
+- Passo 3: Submeta o formulário para registrar a ideia no banco de dados.
+
+## Acesso à Tela Home
+
+- Passo 1: Acesse a tela inicial do sistema.
+- Passo 2: Verifique a listagem de ideias cadastradas, confirmando a exibição dos atributos como categoria, texto, autor, data de criação e curtidas.
