@@ -5,32 +5,29 @@ import {
     Input,
     Button,
     Flex,
-    Link as ChakraLink,
     useToast,
 } from "@chakra-ui/react";
 import * as yup from 'yup';
-import { useState, useEffect } from "react";
-import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import authServices from "../../services/auth";
-import { authSchema } from "./schema";
 import logo from "../../assets/logo.png";
+import { signUpSchema, getApiData } from './schema';
 
-const Auth = () => {
+const SignUp = () => {
 
     const navigate = useNavigate();
     const toast = useToast();
-    const authData = JSON.parse(localStorage.getItem("auth"));
 
-    const [formData, setFormData] = useState({ email: "", password: "" });
+    const [formData, setFormData] = useState({
+        fullname: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    });
     const [loading, setLoading] = useState(false);
-    const { login } = authServices();
+    const { signup } = authServices();
     const [errors, setErrors] = useState({});
-
-    useEffect(() => {
-        if (authData) {
-            navigate("/profile");
-        }
-    }, [authData, navigate]);
 
     const handleFormDataChange = (e) => {
         setFormData({
@@ -41,27 +38,31 @@ const Auth = () => {
 
     const handleSubmitForm = async (e) => {
         e.preventDefault();
-        console.log("FormData enviado:", formData);
         setLoading(true);
         setErrors({});
 
         try {
-            await authSchema.validate(formData, { abortEarly: false });
+            await signUpSchema.validate(formData, { abortEarly: false });
 
-            const success = await login(formData);
+            const apiData = getApiData(formData);
+            console.log("FormData enviado:", formData);
+
+            const success = await signup(apiData);
+            console.log("ApiData enviado:", apiData);
 
             if (success) {
+                console.log("Registro efetuado com sucesso!");
                 toast({
-                    title: "Login efetuado com sucesso!",
+                    title: "Registro efetuado com sucesso!",
                     position: "top-right",
                     status: "success",
                     duration: 5000,
                     isClosable: true,
                 });
-                navigate("/profile");
+                navigate("/");
             }
-
         } catch (error) {
+            console.log("Erro no handleSubmitForm:", error);
             if (error instanceof yup.ValidationError) {
                 const validationErrors = {};
                 error.inner.forEach((err) => {
@@ -115,6 +116,40 @@ const Auth = () => {
                     onSubmit={handleSubmitForm}
                     style={{ padding: "1.25rem", marginBottom: "1.25rem" }}
                 >
+                    {/* Campo de nome completo */}
+                    <FormControl
+                        isInvalid={!!errors.fullname}
+                        w="100%"
+                        mb="1.925rem"
+                        textAlign="center"
+                    >
+                        <FormLabel
+                            fontSize="clamp(1rem, 2vw, 1.5rem)"
+                            fontWeight="bold"
+                            color="#cb8c26"
+                            mb="0.3125rem"
+                        >
+                            Nome Completo
+                        </FormLabel>
+                        <Input
+                            type="text"
+                            name="fullname"
+                            value={formData.fullname}
+                            onChange={handleFormDataChange}
+                            textAlign="left"
+                            p="0.625rem"
+                            borderRadius="0.625rem"
+                            fontSize="clamp(1rem, 2vw, 1.5rem)"
+                            w={{ base: "100%", sm: "380px" }}
+                            border="none"
+                            bg="white"
+                            _focus={{
+                                outline: "2px solid #cb8c26",
+                            }}
+                        />
+                        <FormErrorMessage>{errors.fullname}</FormErrorMessage>
+                    </FormControl>
+
                     {/* Campo de e-mail */}
                     <FormControl
                         isInvalid={!!errors.email}
@@ -183,7 +218,43 @@ const Auth = () => {
                         <FormErrorMessage>{errors.password}</FormErrorMessage>
                     </FormControl>
 
-                    {/* Botão de login */}
+                    {/* Campo de confirmação de senha */}
+
+                    <FormControl
+                        isInvalid={!!errors.confirmPassword}
+                        mb="1.925rem"
+                        textAlign="center"
+                    >
+                        <FormLabel
+                            fontSize="clamp(1rem, 2vw, 1.5rem)"
+                            fontWeight="bold"
+                            color="#cb8c26"
+                            mb="0.3125rem"
+                        >
+                            Confirmar Senha
+                        </FormLabel>
+                        <Input
+                            type="password"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleFormDataChange}
+                            textAlign="left"
+                            p="0.625rem"
+                            borderRadius="0.625rem"
+                            fontSize="clamp(1rem, 2vw, 1.5rem)"
+                            maxW="400px"
+                            w={{ base: "100%", sm: "380px" }}
+                            border="none"
+                            bg="white"
+                            _focus={{
+                                outline: "2px solid #cb8c26",
+                            }}
+                        />
+                        <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
+                    </FormControl>
+
+
+                    {/* Botão de Registro */}
                     <Button
                         type="submit"
                         isLoading={loading}
@@ -197,45 +268,14 @@ const Auth = () => {
                         mt="0.625rem"
                         _hover={{ bg: "#f9bb58" }}
                     >
-                        {loading ? "Entrando..." : "ENTRAR"}
+                        {loading ? "Carregando..." : "CRIAR CONTA"}
                     </Button>
                 </form>
 
-                {/* Botão de registro */}
-                <ChakraLink
-                    as={RouterLink}
-                    to="/signup"
-                    mt="1.25rem"
-                    w="clamp(180px, 30%, 200px)"
-                >
-                    <Button
-                        bg="#cb8c26"
-                        color="white"
-                        fontSize="clamp(1rem, 1.5vw, 1.375rem)"
-                        p="0.625rem"
-                        h="2.875rem"
-                        w="clamp(180px, 30%, 200px)"
-                        borderRadius="0.825rem"
-                        mt="0.625rem"
-                        _hover={{ bg: "#f9bb58" }}
-                    >
-                        REGISTRAR
-                    </Button>
-                </ChakraLink>
-
-                {/* Link de esquecimento de senha */}
-                <ChakraLink
-                    to="/forgot-password"
-                    mt="5.625rem"
-                    fontSize="clamp(1rem, 1.5vw, 1.375rem)"
-                    color="#CB8C26"
-                    _hover={{ textDecoration: "underline" }}
-                >
-                    Esqueceu sua senha?
-                </ChakraLink>
             </Flex>
         </Flex>
     );
+
 };
 
-export default Auth;
+export default SignUp;
