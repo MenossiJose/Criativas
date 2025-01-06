@@ -28,7 +28,7 @@ const Auth = () => {
 
     useEffect(() => {
         if (authData) {
-            navigate("/profile");
+            navigate("/home");
         }
     }, [authData, navigate]);
 
@@ -58,7 +58,7 @@ const Auth = () => {
                     duration: 5000,
                     isClosable: true,
                 });
-                navigate("/profile");
+                navigate("/landing");
             }
 
         } catch (error) {
