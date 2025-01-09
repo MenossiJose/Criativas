@@ -14,9 +14,9 @@ export default function Idea() {
         text: "",
         user: user || "",
     })
-   
 
-    
+
+
     const handleFormDataChange = (e) => {
         setFormData({
             ...formData,
@@ -41,29 +41,29 @@ export default function Idea() {
                 <>
                     <h1>Cadastrar Ideia</h1>
 
-   
 
-            <form onSubmit={handleSubmitForm}>
-                <TextField
-                    required
-                    label="Categoria"
-                    type="text"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleFormDataChange}
-                />
-                <TextField
-                    required
-                    label="Ideia"
-                    type="text"
-                    name="text"
-                    value={formData.text}
-                    onChange={handleFormDataChange}
-                />
-       
-                <Button type="submit">Cadastrar</Button>
-            </form>
-            </>
+
+                    <form onSubmit={handleSubmitForm}>
+                        <TextField
+                            required
+                            label="Categoria"
+                            type="text"
+                            name="category"
+                            value={formData.category}
+                            onChange={handleFormDataChange}
+                        />
+                        <TextField
+                            required
+                            label="Ideia"
+                            type="text"
+                            name="text"
+                            value={formData.text}
+                            onChange={handleFormDataChange}
+                        />
+
+                        <Button type="submit">Cadastrar</Button>
+                    </form>
+                </>
             ) : (
                 <>
                     <h1>Ideias</h1>
