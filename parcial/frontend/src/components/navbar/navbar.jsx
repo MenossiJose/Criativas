@@ -20,7 +20,7 @@ import logonav from '../../assets/logonav.png';
 // Define os links com rótulos e URLs
 const Links = [
     { label: 'Cadastrar Ideia', path: '/ideas' },
-    { label: 'Perfil', path: '/perfil' },
+    { label: 'Perfil', path: '/profile' },
     { label: 'Banco de Ideias', path: '/home' },
 ];
 

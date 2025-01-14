@@ -3,6 +3,8 @@ import Auth from "../pages/auth/page";
 import SingUp from "../pages/signup/page";
 import LandingPage from "../pages/landingPage/page";
 import Home from "../pages/home/page";
+import Profile from "../pages/profile/page";
+
 const RoutesMain = () => {
     return (
         <Routes>
@@ -10,6 +12,7 @@ const RoutesMain = () => {
             <Route path="/signup" element={<SingUp />} />
             <Route path="/landing" element={<LandingPage />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
         </Routes>
     );
 };

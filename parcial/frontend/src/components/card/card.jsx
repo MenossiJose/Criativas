@@ -7,6 +7,7 @@ import {
     Heading,
     Icon,
     Button,
+    IconButton,
 } from '@chakra-ui/react'
 import { FaRegThumbsUp, FaRegTrashCan, FaCommentDots } from "react-icons/fa6";
 
@@ -38,7 +39,10 @@ const CardIdea = (category, date, description, user, isOwner, onDelete) => {
                     left="3"
                     as={FaRegTrashCan}
                 />
-                <Heading size='md'>Categoria</Heading>
+                <Heading size='md'
+                    fontSize="24px">
+                    Categoria
+                </Heading>
                 <Text
                     pos="absolute"
                     top="2"
@@ -68,43 +72,39 @@ const CardIdea = (category, date, description, user, isOwner, onDelete) => {
                     Usuário
                 </Text>
 
-                <Button
+                <IconButton
+                    aria-label='Like'
                     pos="absolute"
                     bottom="2.5"
+                    bg="transparent"
                     right="3"
                     w="21px"
                     h="21px"
-                    bg="transparent"
-                    _hover={{ bg: 'rgba(255, 255, 255, 0.2)' }}
-                    p="0"
-                    minW="0"
-                >
-                    <Icon
-                        w="21px"
-                        h="21px"
-                        as={FaRegThumbsUp}
-                        color="#504C4C"
-                    />
-                </Button>
+                    as={FaRegThumbsUp}
+                    color="#504C4C"
+                    _hover={{
+                        bg: 'transparent',
+                        cursor: 'pointer',
+                        color: '#666'
+                    }}
+                />
 
-                <Button
+                <IconButton
+                    aria-label='Comment'
                     pos="absolute"
                     bottom="2.5"
-                    right="12"
+                    bg="transparent"
+                    right="16"
                     w="21px"
                     h="21px"
-                    bg="transparent"
-                    _hover={{ bg: 'rgba(255, 255, 255, 0.2)' }}
-                    p="0"
-                    minW="0"
-                >
-                    <Icon
-                        w="21px"
-                        h="21px"
-                        as={FaCommentDots}
-                        color="#504C4C"
-                    />
-                </Button>
+                    as={FaCommentDots}
+                    color="#504C4C"
+                    _hover={{
+                        bg: 'transparent',
+                        cursor: 'pointer',
+                        color: '#666'
+                    }}
+                />
 
             </CardFooter>
         </Card>
