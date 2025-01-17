@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { TextField, Button, Alert } from "@mui/material"
-import ideaServices from "../../services/idea"
+import ideaServices from "../../services/Idea"
 import { redirect, useNavigate } from 'react-router-dom'
 
 export default function Idea() {
@@ -28,10 +28,7 @@ export default function Idea() {
         e.preventDefault()
         createIdea(formData)
         setFormData({ category: "", text: "", user: user })
-
     }
-
-
 
     return (
 

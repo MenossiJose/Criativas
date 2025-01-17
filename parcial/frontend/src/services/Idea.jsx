@@ -17,8 +17,8 @@ export default function ideasServices() {
         })
             .then((response) => response.json())
             .then((result) => {
-                    console.log(result)
-                
+                console.log(result)
+
             })
             .catch((error) => {
                 console.log(error)
@@ -41,7 +41,7 @@ export default function ideasServices() {
         })
             .then((response) => response.json())
             .then((result) => {
-                    console.log(result)
+                console.log(result)
             })
             .catch((error) => {
                 console.log(error)
@@ -73,6 +73,24 @@ export default function ideasServices() {
             });
     };
 
+    const likeIdea = (id, user) => {
+        return fetch(`${url}/${id}/like`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify({id, user }), // Inclui o ID do usuário no corpo da requisição
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                return result;
+            })
+            .catch((error) => {
+                console.log(error);
+                return [];
+            });
+    };
 
-    return { ideasLoading, getUsersIdeas, createIdea, getAllIdeas}
+    return { ideasLoading, getUsersIdeas, createIdea, getAllIdeas, likeIdea }
 }

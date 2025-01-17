@@ -1,4 +1,4 @@
-import IdeasDataAccess from "../dataAccess/Ideas.js"
+import IdeasDataAccess from "../dataAccess/ideas.js"
 import { ok, serverError } from "../helpers/httpResponses.js"
 
 export default class IdeasControllers {
@@ -14,8 +14,6 @@ export default class IdeasControllers {
             return serverError(error);
           }
     }
-
-
 
     async getIdeas() {
         try {
@@ -63,5 +61,51 @@ export default class IdeasControllers {
         } catch (error) {
           return serverError(error);
         }
+    }
+    
+    async likeIdea(ideaId, userId){
+      try {
+        const likeIdea = await this.dataAccess.likeIdea(ideaId, userId);
+        return ok({likeIdea, message: 'Idea liked successfully'});
+      } catch (error) {
+        return serverError(error);
       }
+    }
+
+    async addComment(ideaId, userId, text){
+      try {
+        const addComment = await this.dataAccess.addComment(ideaId, userId, text);
+        return ok(addComment);
+      } catch (error) {
+        return serverError(error);
+      }
+    }
+
+    async getComments(ideaId) {
+      try {
+        const getComments = await this.dataAccess.getComments(ideaId);
+        return ok(getComments);
+      } catch (error) {
+        return serverError(error);
+      }
+    }
+
+    async deleteComment(ideaId, commentId) {
+      try {
+        const deleteComment = await this.dataAccess.deleteComment(ideaId, commentId);
+        return ok(deleteComment);
+      } catch (error) {
+        return serverError(error);
+      }
+    }
+
+    async editComment(ideaId, commentId, newText) {
+      try {
+        const editComment = await this.dataAccess.editComment(ideaId, commentId, newText);
+        return ok(editComment);
+      } catch (error) {
+        return serverError(error);
+      }
+    }
+
 }

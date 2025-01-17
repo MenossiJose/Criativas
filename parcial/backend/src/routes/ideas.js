@@ -1,5 +1,5 @@
 import express from 'express'
-import IdeasControllers from '../controllers/Ideas.js'
+import IdeasControllers from '../controllers/ideas.js'
 
 const ideasRouter = express.Router()
 const ideasController = new IdeasControllers()
@@ -16,9 +16,9 @@ ideasRouter.post('/', async (req, res) => {
 
 //Rota para exibir todas as ideias
 ideasRouter.get('/', async (req, res) => {
-    
+
     const response = await ideasController.getIdeas();
-    
+
     res.status(response.statusCode).send(response.body);
 });
 
@@ -45,5 +45,33 @@ ideasRouter.delete('/:id', async (req, res) => {
     res.status(response.statusCode).send(response.body);
 });
 
+//Rota para curtir ideia
+ideasRouter.put('/:id/like', async (req, res) => {
+    const response = await ideasController.likeIdea(req.body.id, req.body.user);
+    res.status(response.statusCode).send(response.body);
+})
+//adicionar um comentário
+ideasRouter.put('/:id/comment', async (req, res) => {
+    const response = await ideasController.addComment(req.body.id, req.body.user, req.body.message);
+    res.status(response.statusCode).send(response.body);
+})
+
+//Rota para pegar todos os comentários
+ideasRouter.get('/:id/comment', async (req, res) => {
+    const response = await ideasController.getComments(req.params.id);
+    res.status(response.statusCode).send(response.body);
+})
+
+//Rota para deletar um comentário
+ideasRouter.delete('/:id/comment', async (req, res) => {
+    const response = await ideasController.deleteComment(req.params.id, req.body.comment);
+    res.status(response.statusCode).send(response.body);
+})
+
+//Rota para editar um comentário
+ideasRouter.put('/:id/comment/edit', async (req, res) => {
+    const response = await ideasController.editComment(req.body.id, req.body.comment, req.body.text);
+    res.status(response.statusCode).send(response.body);
+})
 
 export default ideasRouter 
