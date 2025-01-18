@@ -52,7 +52,7 @@ ideasRouter.put('/:id/like', async (req, res) => {
 })
 //adicionar um comentário
 ideasRouter.put('/:id/comment', async (req, res) => {
-    const response = await ideasController.addComment(req.body.id, req.body.user, req.body.message);
+    const response = await ideasController.addComment(req.body.id, req.body.user, req.body.text);
     res.status(response.statusCode).send(response.body);
 })
 
@@ -63,8 +63,8 @@ ideasRouter.get('/:id/comment', async (req, res) => {
 })
 
 //Rota para deletar um comentário
-ideasRouter.delete('/:id/comment', async (req, res) => {
-    const response = await ideasController.deleteComment(req.params.id, req.body.comment);
+ideasRouter.put('/:id/comment/:comment_id', async (req, res) => {
+    const response = await ideasController.deleteComment(req.params.id, req.params.comment_id);
     res.status(response.statusCode).send(response.body);
 })
 

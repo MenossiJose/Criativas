@@ -79,11 +79,11 @@ export default class ideasDataAccess {
 
   async likeIdea(ideaId, userId) {
     const idea = await Mongo.db
-    .collection(collectionName)
-    .findOne({
-      _id: new ObjectId(ideaId),
-      people_likes: { $in: [userId] }
-    });
+      .collection(collectionName)
+      .findOne({
+        _id: new ObjectId(ideaId),
+        people_likes: { $in: [userId] }
+      });
 
     if (!!idea) {
       const result = await Mongo.db
@@ -131,10 +131,10 @@ export default class ideasDataAccess {
       .collection(collectionName)
       .findOneAndUpdate(
         { _id: new ObjectId(ideaId) },
-        { 
-          $inc: {comments_count: 1},
-          $push: { comments: comment } },
-        { returnOriginal: false }
+        {
+          $inc: { comments_count: 1 },
+          $push: { comments: comment }
+        }
       );
 
     return result.value;
@@ -143,7 +143,7 @@ export default class ideasDataAccess {
   async getComments(ideaId) {
     const idea = await Mongo.db
       .collection(collectionName)
-      .findOne({ _id: new ObjectId(ideaId) }, { projection: { comments: 1 } });
+      .findOne({ _id: new ObjectId(ideaId) });
 
     return idea?.comments || [];
   }
@@ -153,26 +153,11 @@ export default class ideasDataAccess {
       .collection(collectionName)
       .findOneAndUpdate(
         { _id: new ObjectId(ideaId) },
-        { 
-          $inc: {comments_count: -1},
-          $pull: { comments: { id: commentId } } 
-        },
-        { returnOriginal: false }
-      );
-
-    return result.value;
-  }
-
-  async editComment(ideaId, commentId, newText) {
-    const result = await Mongo.db
-      .collection(collectionName)
-      .findOneAndUpdate(
         {
-          _id: new ObjectId(ideaId),
-          "comments.id": commentId,
+          $inc: { comments_count: -1 },
+          $pull: { comments: { id: commentId.toString() } }
         },
-        { $set: { "comments.$.text": newText } },
-        { returnOriginal: false }
+        { returnDocument: 'after' }
       );
 
     return result.value;
