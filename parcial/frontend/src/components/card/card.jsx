@@ -23,7 +23,7 @@ const CardIdea = (category, date, description, user, isOwner, onDelete) => {
             w="387px"
             h="199px"
             borderRadius="15px"
-            bg="#DCB5FB"
+            bg="#FBF8AB"
             boxShadow='lg'
             mx="57"
             my="10"
