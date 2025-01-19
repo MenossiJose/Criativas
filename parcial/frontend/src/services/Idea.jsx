@@ -17,8 +17,8 @@ export default function ideasServices() {
         })
             .then((response) => response.json())
             .then((result) => {
-                    console.log(result)
-                
+                console.log(result)
+
             })
             .catch((error) => {
                 console.log(error)
@@ -28,27 +28,33 @@ export default function ideasServices() {
             })
     }
 
-    const createIdea = (formData) => {
+    const createIdea = async (formData) => {
         setIdeasLoading(true)
 
-        fetch(`${url}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify(formData)
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                    console.log(result)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-            .finally(() => {
-                setIdeasLoading(false)
-            })
+        try {
+            const response = await fetch(`${url}/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify(formData),
+            });
+            const result = await response.json();
+            console.log("Resposta do backend:", result);
+
+            if (!response.ok) {
+                throw new Error('Erro ao criar ideia');
+            }
+            return true;
+
+        } catch (error) {
+            console.error('Erro na criação:', error);
+            return false; // Indica falha
+
+        } finally {
+            setIdeasLoading(false);
+        }
     }
 
     const getAllIdeas = () => {
@@ -74,5 +80,5 @@ export default function ideasServices() {
     };
 
 
-    return { ideasLoading, getUsersIdeas, createIdea, getAllIdeas}
+    return { ideasLoading, getUsersIdeas, createIdea, getAllIdeas }
 }

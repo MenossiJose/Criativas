@@ -1,14 +1,30 @@
-import { useState, useEffect } from "react"
-import { TextField, Button, Alert } from "@mui/material"
+import {
+    Flex,
+    FormControl,
+    FormErrorMessage,
+    Text,
+    Textarea,
+    Input,
+    Button,
+    useToast,
+} from "@chakra-ui/react"
+import * as yup from 'yup';
+import { useState } from "react"
 import ideaServices from "../../services/idea"
-import { redirect, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import SimpleNavbar from "../../components/navbar/navbar"
+import { cardSchema } from "./schema";
 
-export default function Idea() {
+const Idea = () => {
 
     const navigate = useNavigate()
+    const toast = useToast();
 
-    const { ideasLoading, getUsersIdeas, createIdea } = ideaServices()
+    const { createIdea } = ideaServices()
     const user = JSON.parse(localStorage.getItem("auth"))?.user._id
+
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState({
         category: "",
         text: "",
@@ -24,55 +40,130 @@ export default function Idea() {
         })
     }
 
-    const handleSubmitForm = (e) => {
+    const handleSubmitForm = async (e) => {
         e.preventDefault()
-        createIdea(formData)
-        setFormData({ category: "", text: "", user: user })
+        console.log("FormData enviado:", formData);
+        setLoading(true);
+        setErrors({});
+
+        try {
+            await cardSchema.validate(formData, { abortEarly: false });
+
+            const success = await createIdea(formData);
+
+            if (success) {
+                toast({
+                    title: "Ideia criada com sucesso!",
+                    position: "top-right",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                });
+                console.log("FormData enviado no sucess:", formData);
+                setFormData({ category: "", text: "", user: user })
+                navigate("/home");
+            }
+
+        } catch (error) {
+            if (error instanceof yup.ValidationError) {
+                const validationErrors = {};
+                error.inner.forEach((err) => {
+                    validationErrors[err.path] = err.message;
+                });
+                setErrors(validationErrors);
+            } else {
+                toast({
+                    title: "Erro inesperado",
+                    position: "top-right",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                });
+            }
+        } finally {
+            setLoading(false);
+        }
 
     }
 
-
-
     return (
 
-        <>
+        <Flex
+            direction="column"
+            bg="#D9D9D9"
+            h="100vh"
+            overflow="auto">
 
-            {user ? (
-                <>
-                    <h1>Cadastrar Ideia</h1>
+            <SimpleNavbar />
 
+            <Flex
+                mt="5"
+                ml="5">
 
+                <form onSubmit={handleSubmitForm}>
 
-                    <form onSubmit={handleSubmitForm}>
-                        <TextField
-                            required
-                            label="Categoria"
+                    <Text
+                        fontSize="28px"
+                        fontWeight="bold"
+                    >
+                        Cadastrar Ideia</Text>
+
+                    <FormControl
+                        isInvalid={!!errors.category}
+                        mt="4"
+                        mb="5">
+                        <Input
                             type="text"
+                            bg="white"
+                            placeholder="Categoria"
                             name="category"
+                            h="60px"
+                            w="331px"
                             value={formData.category}
                             onChange={handleFormDataChange}
                         />
-                        <TextField
-                            required
-                            label="Ideia"
+                        <FormErrorMessage>{errors.category}</FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl
+                        isInvalid={!!errors.text}>
+                        <Textarea
                             type="text"
                             name="text"
+                            bg="white"
+                            w="565px"
+                            minH="200px"
+                            placeholder="Descrição"
                             value={formData.text}
                             onChange={handleFormDataChange}
                         />
+                        <FormErrorMessage>{errors.text}</FormErrorMessage>
+                    </FormControl>
 
-                        <Button type="submit">Cadastrar</Button>
-                    </form>
-                </>
-            ) : (
-                <>
-                    <h1>Ideias</h1>
-                    <p>Para cadastrar uma ideia, você precisa estar logado</p>
-                </>
-            )}
+                    <Button
+                        type="submit"
+                        isLoading={loading}
+                        bg="#cb8c26"
+                        color="white"
+                        fontSize="clamp(1.405rem, 1.8vw, 1.275rem)"
+                        fontWeight="bold"
+                        p="0.625rem"
+                        h="2.875rem"
+                        w="clamp(180px, 30%, 200px)"
+                        borderRadius="0.825rem"
+                        mt="2.625rem"
+                        _hover={{ bg: "#f9bb58" }}
+                    >
+                        {loading ? "Enviando..." : "CADASTRAR"}
+                    </Button>
 
+                </form>
 
-        </>
+            </Flex>
+
+        </Flex>
     )
 
 }
+
+export default Idea;
