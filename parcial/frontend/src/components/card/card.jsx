@@ -5,17 +5,35 @@ import {
     CardFooter,
     Text,
     Heading,
-    Icon,
-    Button,
     IconButton,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverBody,
+    PopoverArrow,
+    PopoverCloseButton,
+    Button
 } from '@chakra-ui/react'
 import { FaRegThumbsUp, FaRegTrashCan, FaCommentDots } from "react-icons/fa6";
 
 
-const CardIdea = (category, date, description, user, isOwner, onDelete) => {
+const CardIdea = ({ category, date, description, userId, ideaUserId, ideaId, onDelete, showDelete }) => {
 
+    const isOwner = userId === ideaUserId;
 
-    //Usuario Criou? retorna card com exclusao e edicao : retorna card sem exclusao e edicao
+    const handleDelete = () => {
+        onDelete(ideaId);
+    };
+
+    const formatDate = (isoDate) => {
+        const date = new Date(isoDate);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+
+        return `${day}-${month}-${year}`;
+    };
 
     return (
         <Card align='center'
@@ -27,21 +45,62 @@ const CardIdea = (category, date, description, user, isOwner, onDelete) => {
             boxShadow='lg'
             mx="57"
             my="10"
+            position="relative"
         >
             <CardHeader
                 display="flex"
                 justifyContent="space-between"
+                p={3}
             >
-                <Icon pos="absolute"
-                    w="21px"
-                    h="21px"
-                    top="3"
-                    left="3"
-                    as={FaRegTrashCan}
-                />
+                {isOwner && showDelete && (
+                    <Popover>
+                        <PopoverTrigger>
+                            <IconButton
+                                aria-label='Delete'
+                                pos="absolute"
+                                top="3"
+                                bg="transparent"
+                                left="3"
+                                w="21px"
+                                h="21px"
+                                as={FaRegTrashCan}
+                                color="#504C4C"
+                                _hover={{
+                                    bg: 'transparent',
+                                    cursor: 'pointer',
+                                    color: '#666'
+                                }}
+                            />
+
+                        </PopoverTrigger>
+                        <PopoverContent
+                            bg="#781A3C"
+                            borderColor="black">
+                            <PopoverArrow bg="black" />
+                            <PopoverCloseButton color="white" />
+                            <PopoverHeader
+                                fontWeight="bold"
+                                fontSize="18px"
+                                color="white"
+                                borderWidth="0"
+                            >
+                                Tem certeza que deseja excluir?</PopoverHeader>
+                            <PopoverBody
+                            >
+                                <Button colorScheme='red'
+                                    onClick={handleDelete}
+                                >
+                                    SIM
+                                </Button>
+                            </PopoverBody>
+                        </PopoverContent>
+                    </Popover>
+
+                )}
+
                 <Heading size='md'
                     fontSize="24px">
-                    Categoria
+                    {category}
                 </Heading>
                 <Text
                     pos="absolute"
@@ -51,26 +110,25 @@ const CardIdea = (category, date, description, user, isOwner, onDelete) => {
                     fontSize="13px"
                     color="#504C4C"
                 >
-                    22/01/2025
+                    {formatDate(date)}
                 </Text>
             </CardHeader>
-            <CardBody>
-                <Text>Corpo do card</Text>
+            <CardBody
+                display="flex"
+                alignItems="center"
+                textAlign="center"
+                ml="1"
+                flex="1"
+                p={2}
+                overflow="hidden"
+            >
+                <Text>{description}</Text>
             </CardBody>
             <CardFooter
                 display="flex"
+                w="100%"
                 justifyContent="space-between"
             >
-                <Text
-                    pos="absolute"
-                    bottom="2"
-                    left="4"
-                    fontWeight="semibold"
-                    fontSize="14px"
-                    color="#504C4C"
-                >
-                    Usuário
-                </Text>
 
                 <IconButton
                     aria-label='Like'
@@ -107,41 +165,9 @@ const CardIdea = (category, date, description, user, isOwner, onDelete) => {
                 />
 
             </CardFooter>
-        </Card>
+        </Card >
 
     );
 }
 
 export default CardIdea;
-/*
-        <div>
-            <h1>Ideias</h1>
-
-            {ideasLoading ? (
-                <CircularProgress />
-            ) : (
-                <>
-                    {Array.isArray(ideas) && ideas.length === 0 ? (
-                        <Typography variant="body1">Nenhuma ideia encontrada.</Typography>
-                    ) : (
-
-                        ideas.map((idea) => (
-                            <Paper key={idea._id} style={{ margin: "1rem", padding: "1rem" }}>
-                                <Typography variant="h6">Categoria: {idea.category}</Typography>
-                                <Typography variant="body1">{idea.text}</Typography>
-                                <Typography variant="caption" color="textSecondary">
-                                    Criada em: {new Date(idea.createdAt).toLocaleString()}
-                                </Typography>
-                                <Typography variant="caption" color="textSecondary">
-                                    Likes: {idea.likes}
-                                </Typography>
-                                <Typography variant="caption" color="textSecondary">
-                                    Criada por: {idea.user}
-                                </Typography>
-                            </Paper>
-                        ))
-                    )}
-                </>
-            )}
-        </div>
-*/
