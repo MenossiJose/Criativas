@@ -56,12 +56,14 @@ ideasRouter.put("/:id/comment", async (req, res) => {
     req.body.user,
     req.body.text
   );
+  console.log("Resposta do controlador:", response);
   res.status(response.statusCode).send(response.body);
 });
 
 //Rota para pegar todos os comentários
 ideasRouter.get("/:id/comment", async (req, res) => {
   const response = await ideasController.getComments(req.params.id);
+  console.log("Resposta do controlador:", response);
   res.status(response.statusCode).send(response.body);
 });
 

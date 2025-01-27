@@ -1,38 +1,48 @@
-import UsersDataAccess from "../dataAccess/users.js"
-import { ok, serverError } from "../helpers/httpResponses.js"
+import UsersDataAccess from "../dataAccess/users.js";
+import { ok, serverError } from "../helpers/httpResponses.js";
 
 export default class UsersControllers {
-    constructor() {
-        this.dataAccess = new UsersDataAccess()
+  constructor() {
+    this.dataAccess = new UsersDataAccess();
+  }
+
+  async getUsers() {
+    try {
+      const users = await this.dataAccess.getUsers();
+
+      return ok(users);
+    } catch (error) {
+      return serverError(error);
     }
+  }
 
-    async getUsers() {
-        try {
-            const users = await this.dataAccess.getUsers()
+  async getUserByID(userId) {
+    try {
+      const user = await this.dataAccess.getUserByID(userId);
 
-            return ok(users)
-        } catch (error) {
-            return serverError(error)
-        }
+      return ok(user);
+    } catch (error) {
+      return serverError(error);
     }
+  }
 
-    async deleteUser(userId) {
-        try {
-            const result = await this.dataAccess.deleteUser(userId)
+  async deleteUser(userId) {
+    try {
+      const result = await this.dataAccess.deleteUser(userId);
 
-            return ok(result)
-        } catch (error) {
-            return serverError(error)
-        }
+      return ok(result);
+    } catch (error) {
+      return serverError(error);
     }
+  }
 
-    async updateUser(userId, userData) {
-        try {
-            const result = await this.dataAccess.updateUser(userId, userData)
+  async updateUser(userId, userData) {
+    try {
+      const result = await this.dataAccess.updateUser(userId, userData);
 
-            return ok(result)
-        } catch (error) {
-            return serverError(error)
-        }
+      return ok(result);
+    } catch (error) {
+      return serverError(error);
     }
+  }
 }
