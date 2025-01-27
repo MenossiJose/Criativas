@@ -5,6 +5,7 @@ import LandingPage from "../pages/landingPage/page";
 import Home from "../pages/home/page";
 import Profile from "../pages/profile/page";
 import Idea from "../pages/ideas/page";
+import AdminPage from "../pages/admin/page";
 
 const RoutesMain = () => {
     return (
@@ -15,6 +16,7 @@ const RoutesMain = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/idea" element={<Idea />} />
+            <Route path="/admin" element={<AdminPage />} />
         </Routes>
     );
 };

@@ -24,6 +24,13 @@ const Links = [
     { label: 'Banco de Ideias', path: '/home' },
 ];
 
+const LinksAdmin = [
+    { label: 'Cadastrar Ideia', path: '/idea' },
+    { label: 'Perfil', path: '/profile' },
+    { label: 'Banco de Ideias', path: '/home' },
+    { label: 'Admin', path: '/admin' },
+];
+
 function NavLink({ children, path }) {
 
     return (
@@ -72,7 +79,11 @@ export default function SimpleNavbar() {
                             />
                         </Box>
                         <HStack as="nav" spacing={8} display={{ base: 'none', md: 'flex' }}>
-                            {Links.map(({ label, path }) => (
+                            {authData.user.isAdmin ? LinksAdmin.map(({ label, path }) => (
+                                <NavLink key={label} path={path}>
+                                    {label}
+                                </NavLink>
+                            )) : Links.map(({ label, path }) => (
                                 <NavLink key={label} path={path}>
                                     {label}
                                 </NavLink>
@@ -97,7 +108,11 @@ export default function SimpleNavbar() {
                 {isOpen && (
                     <Box pb={4} display={{ md: 'none' }}>
                         <Stack as="nav" spacing={4}>
-                            {Links.map(({ label, path }) => (
+                            {authData.user.isAdmin ? LinksAdmin.map(({ label, path }) => (
+                                <NavLink key={label} path={path}>
+                                    {label}
+                                </NavLink>
+                            )) : Links.map(({ label, path }) => (
                                 <NavLink key={label} path={path}>
                                     {label}
                                 </NavLink>

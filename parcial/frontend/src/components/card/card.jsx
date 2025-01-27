@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import {
     Card,
     CardHeader,
@@ -13,17 +14,73 @@ import {
     PopoverBody,
     PopoverArrow,
     PopoverCloseButton,
-    Button
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalCloseButton,
+    Button,
+    VStack,
+    Input,
+    Flex,
+    Box
 } from '@chakra-ui/react'
 import { FaRegThumbsUp, FaRegTrashCan, FaCommentDots } from "react-icons/fa6";
+import ideaServices from "../../services/idea"
 
 
-const CardIdea = ({ category, date, description, userId, ideaUserId, ideaId, onDelete, showDelete }) => {
+const CardIdea = ({ idea, loggedUser, showDelete, onLike, onDelete }) => {
 
-    const isOwner = userId === ideaUserId;
+    const { likeIdea, getAllComments, addComment } = ideaServices();
+    const [localLikes, setLocalLikes] = useState(idea.likes);
+    const [hasLiked, setHasLiked] = useState(idea.people_likes ? idea.people_likes.includes(loggedUser._id) : false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [comments, setComments] = React.useState([]);
+    const [newComment, setNewComment] = useState("");
+    const isOwner = loggedUser._id === idea.user;
 
     const handleDelete = () => {
-        onDelete(ideaId);
+        onDelete(idea._id);
+    };
+
+    const openModal = async () => {
+        setIsOpen(true);
+        try {
+            const fetchedComments = await getAllComments(idea._id);
+            setComments(fetchedComments || []);
+        } catch (error) {
+            console.error("Erro ao buscar comentários:", error);
+        }
+    };
+
+    const closeModal = () => setIsOpen(false);
+
+    const handleLike = async () => {
+        try {
+            const newLikes = hasLiked ? localLikes - 1 : localLikes + 1;
+            setLocalLikes(newLikes);
+            setHasLiked(!hasLiked);
+
+            const updatedIdea = await likeIdea(idea._id, !hasLiked);
+
+            if (onLike) {
+                onLike(updatedIdea);
+            }
+        } catch (error) {
+            console.error("Erro ao atualizar o like:", error);
+        }
+    }
+
+    const handleAddComment = async () => {
+        try {
+            await addComment(idea._id, loggedUser._id, newComment);
+            setNewComment("");
+            const updatedComments = await getAllComments(idea._id);
+            setComments(updatedComments);
+        } catch (error) {
+            console.error("Erro ao adicionar comentário:", error);
+        }
     };
 
     const formatDate = (isoDate) => {
@@ -100,7 +157,7 @@ const CardIdea = ({ category, date, description, userId, ideaUserId, ideaId, onD
 
                 <Heading size='md'
                     fontSize="24px">
-                    {category}
+                    {idea.category}
                 </Heading>
                 <Text
                     pos="absolute"
@@ -110,7 +167,7 @@ const CardIdea = ({ category, date, description, userId, ideaUserId, ideaId, onD
                     fontSize="13px"
                     color="#504C4C"
                 >
-                    {formatDate(date)}
+                    {formatDate(idea.createdAt)}
                 </Text>
             </CardHeader>
             <CardBody
@@ -122,7 +179,7 @@ const CardIdea = ({ category, date, description, userId, ideaUserId, ideaId, onD
                 p={2}
                 overflow="hidden"
             >
-                <Text>{description}</Text>
+                <Text>{idea.text}</Text>
             </CardBody>
             <CardFooter
                 display="flex"
@@ -130,22 +187,32 @@ const CardIdea = ({ category, date, description, userId, ideaUserId, ideaId, onD
                 justifyContent="space-between"
             >
 
-                <IconButton
-                    aria-label='Like'
-                    pos="absolute"
-                    bottom="2.5"
-                    bg="transparent"
-                    right="3"
-                    w="21px"
-                    h="21px"
-                    as={FaRegThumbsUp}
-                    color="#504C4C"
-                    _hover={{
-                        bg: 'transparent',
-                        cursor: 'pointer',
-                        color: '#666'
-                    }}
-                />
+                <Flex>
+                    <Text
+                        pos="absolute"
+                        bottom="1"
+                        right="12"
+                        bg="transparent"
+                    >{localLikes}</Text>
+                    <IconButton
+                        aria-label='Like'
+                        pos="absolute"
+                        bottom="2.5"
+                        bg="transparent"
+                        right="3"
+                        w="21px"
+                        h="21px"
+                        as={FaRegThumbsUp}
+                        onClick={handleLike}
+                        color="#504C4C"
+                        _hover={{
+                            bg: 'transparent',
+                            cursor: 'pointer',
+                            color: '#666'
+                        }}
+                    />
+
+                </Flex>
 
                 <IconButton
                     aria-label='Comment'
@@ -156,6 +223,7 @@ const CardIdea = ({ category, date, description, userId, ideaUserId, ideaId, onD
                     w="21px"
                     h="21px"
                     as={FaCommentDots}
+                    onClick={openModal}
                     color="#504C4C"
                     _hover={{
                         bg: 'transparent',
@@ -163,6 +231,41 @@ const CardIdea = ({ category, date, description, userId, ideaUserId, ideaId, onD
                         color: '#666'
                     }}
                 />
+
+                <Modal isOpen={isOpen} onClose={closeModal}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Comentários</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <VStack align="stretch" spacing={3}>
+                                {comments && comments.length > 0 ? (
+                                    comments.map((comment) => (
+                                        <Box
+                                            key={comment.id}
+                                            p={3}
+                                            border="1px solid #ccc"
+                                            borderRadius="md"
+                                        >
+                                            <Text fontWeight="bold">{comment.user}</Text>
+                                            <Text>{comment.text}</Text>
+                                        </Box>
+                                    ))
+                                ) : (
+                                    <Text>Nenhum comentário ainda</Text>
+                                )}
+                                <Input
+                                    placeholder="Adicionar comentário"
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                />
+                                <Button onClick={handleAddComment} colorScheme="blue">
+                                    Enviar
+                                </Button>
+                            </VStack>
+                        </ModalBody>
+                    </ModalContent>
+                </Modal>
 
             </CardFooter>
         </Card >

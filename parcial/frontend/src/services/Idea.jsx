@@ -5,8 +5,6 @@ export default function ideasServices() {
 
     const url = 'http://localhost:3000/ideas'
 
-
-
     const getUsersIdeas = (userId) => {
         setIdeasLoading(true);
         return fetch(`${url}/userIdeas/${userId}`, {
@@ -77,23 +75,22 @@ export default function ideasServices() {
             });
     };
 
-    const likeIdea = (id, user) => {
-        return fetch(`${url}/${id}/like`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({ id, user }), // Inclui o ID do usuário no corpo da requisição
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                return result;
-            })
-            .catch((error) => {
-                console.log(error);
-                return [];
+    const likeIdea = async (id, user) => {
+        try {
+            const response = await fetch(`${url}/${id}/like`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify({ id, user }),
             });
+            const result = await response.json();
+            return result.updatedIdea; // Certifique-se de retornar a ideia atualizada
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     };
 
     const deleteIdea = async (ideaId) => {
@@ -115,6 +112,110 @@ export default function ideasServices() {
         }
     };
 
+    const getAllComments = async (id) => {
+        try {
+            const response = await fetch(`${url}/${id}/comment`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            });
 
-    return { ideasLoading, getUsersIdeas, createIdea, getAllIdeas, deleteIdea, likeIdea }
+            if (!response.ok) {
+                throw new Error('Erro ao buscar comentários');
+            }
+
+            const result = await response.json();
+            console.log("Comentários retornados:", result);
+
+            // Verifique se a resposta é um array de comentários
+            if (Array.isArray(result)) {
+                return result; // Retorne o array de comentários diretamente
+            } else {
+                console.error("Nenhum comentário encontrado na resposta:", result);
+                return [];
+            }
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    };
+
+    const addComment = async (ideaId, user, text) => {
+        try {
+            const response = await fetch(`${url}/${ideaId}/comment`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify({ id: ideaId, user, text }),
+            });
+
+            console.log("Resposta bruta da API:", response);
+
+            let responseBody = null;
+            if (response.headers.get("Content-Length") !== "0") {
+                responseBody = await response.json();
+            }
+
+            console.log("Corpo da resposta da API:", responseBody);
+
+            if (!response.ok) {
+                throw new Error(responseBody?.message || "Erro ao adicionar comentário");
+            }
+
+            if (responseBody?.comments) {
+                setComments(responseBody.comments);
+            } else {
+                console.error("Nenhum comentário retornado pela API.");
+            }
+
+            console.log("Comentário adicionado com sucesso:", responseBody);
+        } catch (error) {
+            console.error("Erro ao adicionar comentário:", error);
+        }
+    };
+
+
+    const deletComment = async (id, commentId) => {
+        try {
+            const response = await fetch(`${url}/${id}/comment/${commentId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            });
+            const result = await response.json();
+            return result.updatedIdea; // Certifique-se de retornar a ideia atualizada
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
+
+    const editComment = async (id, comment, text) => {
+        try {
+            const response = await fetch(`${url}/${id}/comment/edit`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify({ id, comment, text }),
+            });
+            const result = await response.json();
+            return result.updatedIdea; // Certifique-se de retornar a ideia atualizada
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
+
+
+
+
+    return { ideasLoading, getUsersIdeas, createIdea, getAllIdeas, deleteIdea, likeIdea, getAllComments, addComment, deletComment, editComment }
 }
