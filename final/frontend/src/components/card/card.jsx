@@ -28,7 +28,7 @@ import {
 } from '@chakra-ui/react'
 import { FaRegThumbsUp, FaRegTrashCan, FaCommentDots } from "react-icons/fa6";
 import ideaServices from "../../services/idea"
-
+import { CheckIcon } from '@chakra-ui/icons'
 
 const CardIdea = ({ idea, loggedUser, showDelete, onLike, onDelete }) => {
 
@@ -72,7 +72,11 @@ const CardIdea = ({ idea, loggedUser, showDelete, onLike, onDelete }) => {
         }
     }
 
-    const handleAddComment = async () => {
+    const handleAddComment = async (e) => {
+        e.preventDefault();
+        if (newComment.trim() === '') {
+            return;
+        }
         try {
             await addComment(idea._id, loggedUser._id, newComment);
             setNewComment("");
@@ -234,34 +238,42 @@ const CardIdea = ({ idea, loggedUser, showDelete, onLike, onDelete }) => {
 
                 <Modal isOpen={isOpen} onClose={closeModal}>
                     <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>Comentários</ModalHeader>
-                        <ModalCloseButton />
+                    <ModalContent bg="#A54367">
+                        <ModalHeader color="white">Comentários</ModalHeader>
+                        <ModalCloseButton color="white" />
                         <ModalBody>
-                            <VStack align="stretch" spacing={3}>
+                            <VStack align="stretch" spacing={3} color="white">
                                 {comments && comments.length > 0 ? (
                                     comments.map((comment) => (
                                         <Box
                                             key={comment.id}
                                             p={3}
-                                            border="1px solid #ccc"
-                                            borderRadius="md"
+                                            borderBottom="1px solid #ccc"
                                         >
-                                            <Text fontWeight="bold">{comment.user}</Text>
+                                            <Text fontWeight="bold">{comment.userId}</Text>
                                             <Text>{comment.text}</Text>
                                         </Box>
                                     ))
                                 ) : (
                                     <Text>Nenhum comentário ainda</Text>
                                 )}
-                                <Input
-                                    placeholder="Adicionar comentário"
-                                    value={newComment}
-                                    onChange={(e) => setNewComment(e.target.value)}
-                                />
-                                <Button onClick={handleAddComment} colorScheme="blue">
-                                    Enviar
-                                </Button>
+                                <Box
+                                    display="flex">
+                                    <Input
+                                        variant='flushed'
+                                        placeholder="Adicionar comentário"
+                                        value={newComment}
+                                        onChange={(e) => setNewComment(e.target.value)}
+                                    />
+                                    <Button onClick={handleAddComment}
+                                        colorScheme="white"
+                                        variant="ghost"
+                                        rightIcon={<CheckIcon />}
+                                        borderRadius="25"
+                                    >
+
+                                    </Button>
+                                </Box>
                             </VStack>
                         </ModalBody>
                     </ModalContent>

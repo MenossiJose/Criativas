@@ -49,6 +49,6 @@ const adminServices = () => {
         }
     };
 
-    return { getUser, deleteUser };
+    return { getUser, deleteUser, userLoading };
 }
 export default adminServices;
