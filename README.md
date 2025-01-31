@@ -56,6 +56,21 @@ Abaixo estão listadas as bibliotecas e ferramentas utilizadas no projeto, organ
 - **React Router DOM** (v6.28.0): [https://reactrouter.com/](https://reactrouter.com/)
 - **Vite** (v5.4.10): [https://vitejs.dev/](https://vitejs.dev/)
 - **ESLint** (v9.13.0): [https://eslint.org/](https://eslint.org/)
+- **Chakra UI** (v2.6.1): [https://chakra-ui.com/](https://chakra-ui.com/)
+- **Chakra UI Icons** (v2.2.4): [https://chakra-ui.com/docs/components/icon](https://chakra-ui.com/docs/components/icon)
+- **Emotion React** (v11.13.5): [https://emotion.sh/docs/introduction](https://emotion.sh/docs/introduction)
+- **Emotion Styled** (v11.13.5): [https://emotion.sh/docs/styled](https://emotion.sh/docs/styled)
+- **React Hook Form** (v7.53.2): [https://react-hook-form.com/](https://react-hook-form.com/)
+- **Hookform Resolvers** (v3.9.0): [https://www.npmjs.com/package/@hookform/resolvers](https://www.npmjs.com/package/@hookform/resolvers)
+- **Material UI** (v6.1.8): [https://mui.com/](https://mui.com/)
+- **Material UI Icons** (v6.1.8): [https://mui.com/material-ui/icons/](https://mui.com/material-ui/icons/)
+- **Axios** (v1.7.8): [https://axios-http.com/](https://axios-http.com/)
+- **Framer Motion** (v11.11.17): [https://www.framer.com/motion/](https://www.framer.com/motion/)
+- **React Icons** (v5.4.0): [https://react-icons.github.io/react-icons/](https://react-icons.github.io/react-icons/)
+- **React Input Mask** (v2.0.4): [https://www.npmjs.com/package/react-input-mask](https://www.npmjs.com/package/react-input-mask)
+- **React Toastify** (v10.0.6): [https://fkhadra.github.io/react-toastify/](https://fkhadra.github.io/react-toastify/)
+- **Yup** (v1.4.0): [https://www.npmjs.com/package/yup](https://www.npmjs.com/package/yup)
+
 
 ### Backend
 
